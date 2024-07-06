@@ -32,6 +32,15 @@ do
 
 
     Tabs.Main:AddButton({
+        Title = "Copy my discord",
+        Description = "Pishite mne, ne boites ya ne kysays",
+        Callback = function()
+			setclipboard("TheMeetly")
+        end
+    })
+
+
+    Tabs.Main:AddButton({
         Title = "AimBot",
         Description = "AimBot Criminality",
         Callback = function()
