@@ -1,12 +1,12 @@
---Criminality
+--criminality
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
 local Window = Fluent:CreateWindow({
-    Title = "Criminality " .. Fluent.Version,
-    SubTitle = "by TheMeetly",
+    Title = "Criminality Scripts " .. Fluent.Version,
+    SubTitle = "by TheMeetly [CRIMINALITY]",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
@@ -17,6 +17,7 @@ local Window = Fluent:CreateWindow({
 --Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
+    Visual = Window:AddTab({ Title = "Visual", Icon = "" }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
@@ -30,25 +31,15 @@ do
         Duration = 5 -- Set to nil to make the notification not disappear
     })
 
-
     Tabs.Main:AddButton({
-        Title = "Copy my discord",
-        Description = "Pishite mne, ne boites ya ne kysays",
-        Callback = function()
-			setclipboard("TheMeetly")
-        end
-    })
-
-
-    Tabs.Main:AddButton({
-        Title = "AimBot",
+        Title = "AimBot UI",
         Description = "AimBot Criminality",
         Callback = function()
 			loadstring(game:HttpGet('https://raw.githubusercontent.com/Mick-gordon/Hyper-Escape/main/DeleteMobCheatEngine.lua'))()
         end
     })
 
-	Tabs.Main:AddButton({
+	Tabs.Visual:AddButton({
         Title = "ESP",
         Description = "Esp",
         Callback = function(esp)
@@ -56,7 +47,7 @@ do
         end
     })
 
-    local Toggle = Tabs.Main:AddToggle("Chams", {Title = "Chams", Default = false })
+    local Toggle = Tabs.Visual:AddToggle("Chams", {Title = "Chams", Default = false })
 
     Toggle:OnChanged(function(Value)
         _G.highlightEnabled = Value
@@ -103,19 +94,63 @@ do
     
     spawn(handleHighlight)
 
-	local Camera = game.Workspace.CurrentCamera
+    local Camera = game.Workspace.CurrentCamera
+    local RunService = game:GetService("RunService")
+    
+    local Slider = Tabs.Visual:AddSlider("Slider", {
+        Title = "FOV changer",
+        Description = "FOV",
+        Default = 60,
+        Min = 60,
+        Max = 120,
+        Rounding = 1,
+        Callback = function(Value)
+            -- Установим значение FOV согласно слайдеру
+            Camera.FieldOfView = Value
+        end
+    })
+    
+    -- Отслеживаем изменения FOV в каждом кадре
+    RunService.RenderStepped:Connect(function()
+        -- Проверяем текущее значение FOV и обновляем его, если нужно
+        if Camera.FieldOfView ~= Slider.Value then
+            Camera.FieldOfView = Slider.Value
+        end
+    end)
 
-	local Slider = Tabs.Main:AddSlider("Slider", {
-		Title = "FOV changer",
-		Description = "FOV",
-		Default = 60,
-		Min = 60,
-		Max = 120,
-		Rounding = 1,
-		Callback = function(Value)
-			Camera.FieldOfView = Value
-		end
-	})
+    Tabs.Visual:AddButton({
+        Title = "FullBright",
+        Description = "FullBright",
+        Callback = function(esp)
+			pcall(function()
+                local lighting = game:GetService("Lighting");
+                lighting.Ambient = Color3.fromRGB(255, 255, 255);
+                lighting.Brightness = 1;
+                lighting.FogEnd = 1e10;
+                for i, v in pairs(lighting:GetDescendants()) do
+                    if v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("ColorCorrectionEffect") or v:IsA("SunRaysEffect") then
+                        v.Enabled = false;
+                    end;
+                end;
+                lighting.Changed:Connect(function()
+                    lighting.Ambient = Color3.fromRGB(255, 255, 255);
+                    lighting.Brightness = 1;
+                    lighting.FogEnd = 1e10;
+                end);
+                spawn(function()
+                    local character = game:GetService("Players").LocalPlayer.Character;
+                    while wait() do
+                        repeat wait() until character ~= nil;
+                        if not character.HumanoidRootPart:FindFirstChildWhichIsA("PointLight") then
+                            local headlight = Instance.new("PointLight", character.HumanoidRootPart);
+                            headlight.Brightness = 1;
+                            headlight.Range = 60;
+                        end;
+                    end;
+                end);
+            end)
+        end
+    })
 
     Tabs.Main:AddButton({
         Title = "Glide Fly",
@@ -140,7 +175,7 @@ local holdingDKey = false
 local holdingSpaceKey = false
 local holdingShiftKey = false
 local check = false
-GuiService:SetCore("SendNotification", {Title = "Speed", Text = "Script made by Zurewrath";})
+GuiService:SetCore("SendNotification", {Title = "Speed", Text = "Script made by TheMeetly";})
 mouse.KeyDown:connect(function(key)
    if key == enablepart then
        if flypart then
@@ -269,7 +304,38 @@ end)
         Title = "Jump-Boost",
         Description = "Gravity",
         Callback = function()
-			game.workspace.Gravity = 70
+			game.workspace.Gravity = 80
+        end
+    })
+
+    Tabs.Main:AddButton({
+        Title = "Spin (P)",
+        Description = "SpinBot",
+        Callback = function()
+			local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+local rotationSpeed = 200
+local rotating = false 
+
+local function toggleRotation()
+    rotating = not rotating 
+    
+    while rotating do
+        
+        humanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.Angles(0, math.rad(rotationSpeed), 0)
+        wait(0.1) 
+    end
+end
+
+local UserInputService = game:GetService("UserInputService")
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.P then
+        toggleRotation()
+    end
+end)
         end
     })
 
