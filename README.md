@@ -154,6 +154,22 @@ do
     })
 
     Tabs.Visual:AddButton({
+        Title = "Show Chat",
+        Description = "Show Chat",
+        Callback = function()
+		-- // Services
+local Players = game:GetService("Players")
+
+-- // Vars
+local ChatFrame = Players.LocalPlayer.PlayerGui.Chat.Frame
+
+-- //
+ChatFrame.ChatChannelParentFrame.Visible = true
+ChatFrame.ChatBarParentFrame.Position = UDim2.new(0, 0, 1, -42)	
+        end
+    })
+
+    Tabs.Visual:AddButton({
         Title = "KeyStrokes",
         Description = "KeyStrokes",
         Callback = function(esp)
@@ -886,6 +902,10 @@ end)
         Content = "Visual"
     })
 
+    Tabs.Updates:AddParagraph({
+        Title = "[+] Show Chat",
+        Content = "Visual"
+    })
 
 -- Addons:
 -- SaveManager (Allows you to have a configuration system)
