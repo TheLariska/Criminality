@@ -885,8 +885,8 @@ end)
     })
 
 	Tabs.Main:AddButton({
-        Title = "CLICK TO COPY MY DISCORD",
-        Description = "my discord",
+        Title = "CLICK TO COPY MY DISCORD, Im from Russia!",
+        Description = "my discord, HE_BACOK8, mojesh napisat mne",
         Callback = function()
 			setclipboard("TheMeetly")
         end
